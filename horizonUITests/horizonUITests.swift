@@ -2,40 +2,94 @@
 //  horizonUITests.swift
 //  horizonUITests
 //
-//  Created by Yagiz Gunes Teker on 22.02.26.
-//
 
 import XCTest
 
-final class horizonUITests: XCTestCase {
+@MainActor
+final class HorizonUITests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    var app: XCUIApplication!
 
-        // In UI tests it is usually best to stop immediately when a failure occurs.
+    override func setUp() async throws {
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
+        app = XCUIApplication()
         app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
 
-    @MainActor
-    func testLaunchPerformance() throws {
-        // This measures how long it takes to launch your application.
-        measure(metrics: [XCTApplicationLaunchMetric()]) {
-            XCUIApplication().launch()
-        }
+    override func tearDown() async throws {
+        app.terminate()
+    }
+
+    // MARK: - Launch
+
+    func testAppIsRunningAfterLaunch() async {
+        XCTAssertEqual(app.state, .runningForeground)
+    }
+
+    func testNoRegularWindowsOnLaunch() async {
+        XCTAssertEqual(app.windows.count, 0)
+    }
+
+    // MARK: - Menu bar item
+
+    func testMenuBarItemExistsAfterLaunch() async {
+        XCTAssertTrue(app.buttons["◎"].waitForExistence(timeout: 2))
+    }
+
+    // MARK: - Popover content
+
+    private func openPopover() {
+        app.buttons["◎"].click()
+    }
+
+    func testClickingMenuBarItemOpensPopover() async {
+        openPopover()
+        XCTAssertTrue(app.staticTexts["Idle"].waitForExistence(timeout: 2))
+    }
+
+    func testPopoverHasStartButton() async {
+        openPopover()
+        XCTAssertTrue(app.buttons["Start"].waitForExistence(timeout: 2))
+    }
+
+    func testPopoverHasQuitButton() async {
+        openPopover()
+        XCTAssertTrue(app.buttons["Quit Horizon"].waitForExistence(timeout: 2))
+    }
+
+    // MARK: - Start / Stop flow
+
+    func testStartButtonChangesToStop() async {
+        openPopover()
+        app.buttons["Start"].click()
+        XCTAssertTrue(app.buttons["Stop"].waitForExistence(timeout: 2))
+    }
+
+    func testStopButtonChangesToStart() async {
+        openPopover()
+        app.buttons["Start"].click()
+        _ = app.buttons["Stop"].waitForExistence(timeout: 2)
+        app.buttons["Stop"].click()
+        XCTAssertTrue(app.buttons["Start"].waitForExistence(timeout: 2))
+    }
+
+    func testPhaseLabelChangesToWorkAfterStart() async {
+        openPopover()
+        app.buttons["Start"].click()
+        XCTAssertTrue(app.staticTexts["Work"].waitForExistence(timeout: 2))
+    }
+
+    func testPhaseLabelReturnsToIdleAfterStop() async {
+        openPopover()
+        app.buttons["Start"].click()
+        _ = app.buttons["Stop"].waitForExistence(timeout: 2)
+        app.buttons["Stop"].click()
+        XCTAssertTrue(app.staticTexts["Idle"].waitForExistence(timeout: 2))
+    }
+
+    func testMenuBarLabelChangesAfterStart() async {
+        openPopover()
+        app.buttons["Start"].click()
+        XCTAssertFalse(app.buttons["◎"].waitForExistence(timeout: 2))
     }
 }

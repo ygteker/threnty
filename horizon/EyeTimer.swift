@@ -7,12 +7,13 @@ import AppKit
 import Observation
 
 @Observable final class EyeTimer {
+
     enum Phase {
         case idle, working, breaking
     }
 
-    static let workDuration  = 1 * 10
-    static let breakDuration = 20
+    static var workDuration  = 20 * 60
+    static var breakDuration = 20
 
     private(set) var phase: Phase = .idle
     private(set) var secondsRemaining: Int = 0
@@ -22,6 +23,8 @@ import Observation
 
     private var timer: Timer?
     private var targetDate: Date = .distantFuture
+
+    // MARK: - Derived display values
 
     var menuBarLabel: String {
         switch phase {
@@ -46,10 +49,12 @@ import Observation
 
     var breakProgress: Double {
         guard phase == .breaking else { return 0 }
-        let total = Double(EyeTimer.breakDuration)
+        let total   = Double(EyeTimer.breakDuration)
         let elapsed = total - Double(secondsRemaining)
         return elapsed / total
     }
+
+    // MARK: - Public controls
 
     func start() {
         guard phase == .idle else { return }
@@ -79,12 +84,10 @@ import Observation
     }
 
     func toggle() {
-        if phase == .idle {
-            start()
-        } else {
-            stop()
-        }
+        if phase == .idle { start() } else { stop() }
     }
+
+    // MARK: - Private timer machinery
 
     private func scheduleTimer() {
         timer?.invalidate()
@@ -106,12 +109,14 @@ import Observation
             secondsRemaining = EyeTimer.breakDuration
             phase = .breaking
             onBreakStart?()
+
         case .breaking:
             NSSound(named: "Glass")?.play()
             targetDate = Date().addingTimeInterval(Double(EyeTimer.workDuration))
             secondsRemaining = EyeTimer.workDuration
             phase = .working
             onBreakEnd?()
+
         case .idle:
             break
         }
