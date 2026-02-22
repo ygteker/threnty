@@ -1,1 +1,19 @@
-*.md
+# Xcode build output
+DerivedData/
+build/
+*.o
+*.d
+
+# Xcode user-specific files (local preferences, breakpoints, etc.)
+xcuserdata/
+
+# Xcode automatic preview + debug dylibs
+*.moved-aside
+*.playground/
+*.xcuserstate
+
+# macOS
+.DS_Store
+
+# Claude
+CLAUDE.md
