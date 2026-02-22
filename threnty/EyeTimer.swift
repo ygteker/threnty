@@ -1,7 +1,3 @@
-//
-//  EyeTimer.swift
-//  horizon
-//
 
 import AppKit
 import Observation

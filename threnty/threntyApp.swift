@@ -1,12 +1,8 @@
-//
-//  horizonApp.swift
-//  horizon
-//
 
 import SwiftUI
 
 @main
-struct horizonApp: App {
+struct threntyApp: App {
     private let timerModel = EyeTimer()
     private let overlayController = OverlayWindowController()
 

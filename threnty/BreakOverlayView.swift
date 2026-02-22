@@ -1,7 +1,3 @@
-//
-//  BreakOverlayView.swift
-//  horizon
-//
 
 import SwiftUI
 

@@ -1,10 +1,6 @@
-//
-//  horizonTests.swift
-//  horizonTests
-//
 
 import XCTest
-@testable import horizon
+@testable import Threnty
 
 @MainActor
 final class EyeTimerTests: XCTestCase {

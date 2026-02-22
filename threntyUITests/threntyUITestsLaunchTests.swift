@@ -1,13 +1,7 @@
-//
-//  horizonUITestsLaunchTests.swift
-//  horizonUITests
-//
-//  Created by Yagiz Gunes Teker on 22.02.26.
-//
 
 import XCTest
 
-final class horizonUITestsLaunchTests: XCTestCase {
+final class threntyUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

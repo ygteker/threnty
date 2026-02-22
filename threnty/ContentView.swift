@@ -1,7 +1,3 @@
-//
-//  ContentView.swift
-//  horizon
-//
 
 import SwiftUI
 
@@ -26,7 +22,7 @@ struct PopoverContentView: View {
 
             Divider()
 
-            Button("Quit Horizon") {
+            Button("Quit Threnty") {
                 NSApp.terminate(nil)
             }
             .foregroundStyle(.red)

@@ -1,7 +1,3 @@
-//
-//  OverlayWindowController.swift
-//  horizon
-//
 
 import AppKit
 import SwiftUI

@@ -1,12 +1,8 @@
-//
-//  horizonUITests.swift
-//  horizonUITests
-//
 
 import XCTest
 
 @MainActor
-final class HorizonUITests: XCTestCase {
+final class ThrentyUITests: XCTestCase {
 
     var app: XCUIApplication!
 
@@ -54,7 +50,7 @@ final class HorizonUITests: XCTestCase {
 
     func testPopoverHasQuitButton() async {
         openPopover()
-        XCTAssertTrue(app.buttons["Quit Horizon"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.buttons["Quit Threnty"].waitForExistence(timeout: 2))
     }
 
     // MARK: - Start / Stop flow
