@@ -2,16 +2,31 @@
 //  horizonApp.swift
 //  horizon
 //
-//  Created by Yagiz Gunes Teker on 22.02.26.
-//
 
 import SwiftUI
 
 @main
 struct horizonApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
+    private let timerModel = EyeTimer()
+    private let overlayController = OverlayWindowController()
+
+    init() {
+        NSApplication.shared.setActivationPolicy(.accessory)
+        timerModel.onBreakStart = { [overlayController, weak timerModel] in
+            guard let timerModel else { return }
+            overlayController.show(timerModel: timerModel)
         }
+        timerModel.onBreakEnd = { [overlayController] in
+            overlayController.dismiss()
+        }
+    }
+
+    var body: some Scene {
+        MenuBarExtra {
+            PopoverContentView(timerModel: timerModel)
+        } label: {
+            Text(timerModel.menuBarLabel)
+        }
+        .menuBarExtraStyle(.window)
     }
 }
